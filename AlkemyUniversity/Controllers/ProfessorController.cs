@@ -11,6 +11,7 @@ using AlkemyUniversity.Models;
 
 namespace AlkemyUniversity.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ProfessorController : Controller
     {
         private UniversityContext db = new UniversityContext();
@@ -49,7 +50,7 @@ namespace AlkemyUniversity.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProfessorID,CourseID,First_Name,Last_Name,DNI")] Professor professor)
+        public ActionResult Create([Bind(Include = "ProfessorID,CourseID,First_Name,Last_Name,DNI,Is_Working")] Professor professor)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +84,7 @@ namespace AlkemyUniversity.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ProfessorID,CourseID,First_Name,Last_Name,DNI")] Professor professor)
+        public ActionResult Edit([Bind(Include = "ProfessorID,CourseID,First_Name,Last_Name,DNI,Is_Working")] Professor professor)
         {
             if (ModelState.IsValid)
             {

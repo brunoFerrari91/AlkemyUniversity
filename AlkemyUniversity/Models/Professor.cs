@@ -12,7 +12,7 @@ namespace AlkemyUniversity.Models
         public string First_Name { get; set; }
         public string Last_Name { get; set; }
         public int DNI { get; set; }
-        //public Boolean Is_Working { get; set; }
+        public bool Is_Working { get; set; }
 
         public virtual Course Course { get; set; }
     }

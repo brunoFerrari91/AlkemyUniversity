@@ -1,18 +1,42 @@
-﻿@{
-	ViewBag.Title = "Student Home Page";
+﻿@model IEnumerable<AlkemyUniversity.Models.Course>
+
+@{
+	ViewBag.Title = "Courses";
 }
 
-<div class="row">
-	<div class="col-md-4">
-		<h2>Enrollments</h2>
-		<p>@Html.ActionLink("Click here to see your current enrollments", "Details", "Enrollment", new { id = ViewBag.Message}, new { @class = "btn btn-default", role = "button" })</p>
-	</div>
-	<div class="col-md-4">
-		<h2>Courses</h2>
-		<p>@Html.ActionLink("Click here to see all courses", "Index", "Course", null, new { @class = "btn btn-default", role = "button" })</p>
-	</div>
-	<div class="col-md-4">
-		<h2>New Enrollment</h2>
-		<p>@Html.ActionLink("Click here to enroll in a new course", "Create", "Enrollment", new { id = ViewBag.Message }, new { @class = "btn btn-default", role = "button" })</p>
-	</div>
-</div>
+<h2>Courses</h2>
+
+<table class="table">
+	<tr>
+		<th>
+			@Html.DisplayNameFor(model => model.Title)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Quota)
+		</th>
+		<th>
+			@Html.DisplayNameFor(model => model.Description)
+		</th>
+		<th></th>
+	</tr>
+	@foreach (var item in Model)
+	{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Title)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Quota)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Description)
+			</td>
+			<td>
+				@Html.ActionLink("Details", "Details", "Course", new { id = item.CourseID }, null) |
+				@Html.ActionLink("Enroll", "Enroll", "Course", new { id = item.CourseID }, null) |
+
+			</td>
+		</tr>
+	}
+
+</table>

@@ -11,6 +11,7 @@ using AlkemyUniversity.Models;
 
 namespace AlkemyUniversity.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class ScheduleController : Controller
     {
         private UniversityContext db = new UniversityContext();

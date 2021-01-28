@@ -29,5 +29,13 @@ namespace AlkemyUniversity.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<AlkemyUniversity.Models.Enrollment> Enrollments { get; set; }
+
+        public System.Data.Entity.DbSet<AlkemyUniversity.Models.Course> Courses { get; set; }
+
+        public System.Data.Entity.DbSet<AlkemyUniversity.Models.Student> Students { get; set; }
+
+        public System.Data.Entity.DbSet<AlkemyUniversity.Models.Professor> Professors { get; set; }
     }
 }

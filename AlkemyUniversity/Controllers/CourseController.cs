@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using AlkemyUniversity.DAL;
 using AlkemyUniversity.Models;
+using Microsoft.AspNet.Identity;
 
 namespace AlkemyUniversity.Controllers
 {
@@ -16,12 +17,8 @@ namespace AlkemyUniversity.Controllers
         private UniversityContext db = new UniversityContext();
 
         // GET: Course
-        public ActionResult Index()
-        {
-            var courses = db.Courses.OrderBy(t => t.Title).ToList();
-            return View(courses);
-        }
 
+        [Authorize(Roles = "Admin")]
         public ActionResult IndexAdmin()
         {
             var courses = db.Courses.OrderBy(t => t.Title).ToList();
@@ -29,6 +26,7 @@ namespace AlkemyUniversity.Controllers
         }
 
         // GET: Course/Details/5
+        [Authorize(Roles = "Student")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -42,8 +40,54 @@ namespace AlkemyUniversity.Controllers
             }
             return View(course);
         }
+        [Authorize(Roles = "Admin")]
+        public ActionResult DetailsAdmin(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Course course = db.Courses.Find(id);
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+            return View(course);
+        }
+
+        [Authorize(Roles = "Student")]
+        public ActionResult Enroll(int id)
+        {
+            Course course = db.Courses.Find(id);
+            if (course.Quota <= 0)
+            {
+                ViewBag.message = "This course is full";
+               return View();
+            }
+            var userId = User.Identity.GetUserId();
+            var enrollments= from c in db.Enrollments
+                             where c.CourseID.Equals(id)
+                             select c;            
+            foreach (var e in enrollments)
+            {
+                if (e.StudentID == userId)
+                {
+                    ViewBag.message = "You are already enrolled in this course";
+                    return View();
+                }
+            }           
+            course.Quota -= 1;
+            Enrollment enrollment = new Enrollment();
+            enrollment.CourseID = id;
+            enrollment.StudentID = userId;
+            db.Enrollments.Add(enrollment);
+            db.SaveChanges(); 
+            ViewBag.message = "You have been succesfully enrolled in this course";
+            return View();                    
+        }
 
         // GET: Course/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             return View();
@@ -60,13 +104,14 @@ namespace AlkemyUniversity.Controllers
             {
                 db.Courses.Add(course);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexAdmin");
             }
 
             return View(course);
         }
 
         // GET: Course/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -92,12 +137,13 @@ namespace AlkemyUniversity.Controllers
             {
                 db.Entry(course).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("IndexAdmin");
             }
             return View(course);
         }
 
         // GET: Course/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -120,7 +166,7 @@ namespace AlkemyUniversity.Controllers
             Course course = db.Courses.Find(id);
             db.Courses.Remove(course);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexAdmin");
         }
 
         protected override void Dispose(bool disposing)

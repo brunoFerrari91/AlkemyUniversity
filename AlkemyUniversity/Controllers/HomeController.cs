@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNet.Identity;
+﻿using AlkemyUniversity.DAL;
+using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,25 +10,16 @@ namespace AlkemyUniversity.Controllers
 {
     public class HomeController : Controller
     {
+        private UniversityContext db = new UniversityContext();
+
+        [Authorize(Roles = "Student")]
         public ActionResult Index()
-        { 
-            ViewBag.Message = User.Identity.GetUserId(); 
-            return View();
-        }
-
-        public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
+            var courses = db.Courses.OrderBy(t => t.Title).ToList();
+            return View(courses);
         }
 
-        [Authorize(Roles = "Admin")]
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
 
-            return View();
-        }
+
     }
 }
