@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "Admin Home";
+}
+
+<div class="row">
+	<div class="col-md-4">
+		<h2>Courses</h2>
+		<p>@Html.ActionLink("Click here to create and edit courses", "IndexAdmin", "Course", null, new { @class = "btn btn-default", role = "button" })</p>
+	</div>
+	<div class="col-md-4">
+		<h2>Professors</h2>
+		<p>@Html.ActionLink("Click here to create and edit professors", "Index", "Professor", null, new { @class = "btn btn-default", role = "button" })</p>
+	</div>
+	<div class="col-md-4">
+		<h2>Schedules</h2>
+		<p>@Html.ActionLink("Click here to create and edit schedules", "Index", "Schedule", null, new { @class = "btn btn-default", role = "button" })</p>
+	</div>		
+
+</div>
+

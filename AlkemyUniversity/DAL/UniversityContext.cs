@@ -6,7 +6,7 @@ namespace AlkemyUniversity.DAL
 {
     public class UniversityContext : DbContext
     {
-        public UniversityContext() : base("DefaultConnection")
+        public UniversityContext() : base("UniversityContext")
         {
         }
 
@@ -15,6 +15,7 @@ namespace AlkemyUniversity.DAL
         public DbSet<Course> Courses { get; set; }
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Professor> Professors { get; set; }
+        public DbSet<Student> Students { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using AlkemyUniversity.Models;
+using System.Web.Security;
 
 namespace AlkemyUniversity.Controllers
 {
@@ -61,6 +62,7 @@ namespace AlkemyUniversity.Controllers
             return View();
         }
 
+
         //
         // POST: /Account/Login
         [HttpPost]
@@ -83,11 +85,21 @@ namespace AlkemyUniversity.Controllers
             
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
+            
             var result = await SignInManager.PasswordSignInAsync(model.User, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
-                    return RedirectToLocal(returnUrl);
+                    if (UserManager.IsInRole(user.Id, "Admin"))
+                    //if (Roles.IsUserInRole("Admin"))
+                    {
+                        return RedirectToAction("Index", "Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    //return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
                 case SignInStatus.RequiresVerification:
