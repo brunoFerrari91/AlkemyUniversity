@@ -1,5 +1,5 @@
 # AlkemyUniversity
-MVC project for Alkemy Labs challenge
+MVC project for Alkemy Labs challenge (https://www.alkemy.org/challenges)
 
 
 Database created with code first approach
